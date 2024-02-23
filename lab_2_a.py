@@ -15,8 +15,36 @@ reset_dots()
 
 
 def draw_canvas():
+    global canvas
+    global dots
+    size_x = float(resize_x.get())
+    size_y = float(resize_y.get())
+    def clear_board():
+        canvas.create_polygon(0,0,0,800,800,800,800,0,fill='white')
+
     def draw_line():
-        print(1)
+        canvas.create_line(400, 0, 400, 800)
+        canvas.create_line(0, 400, 800, 400)
+
+    def new_coord(z):
+        return [round(800 * (size_x + z[0]) / (2 * size_x)), round(800 * (size_y - z[1]) / (2 * size_y))]
+
+    def make_line(a, b):
+        canvas.create_line(a[0], a[1], b[0], b[1])
+    clear_board()
+    draw_line()
+    centre = [0, 0]
+    for i in dots:
+        centre[0] += i[0]
+        centre[1] += i[1]
+    centre[0] /= 6
+    centre[1] /= 6
+    make_line(new_coord(centre), new_coord(dots[0]))
+    make_line(new_coord(centre), new_coord(dots[1]))
+    make_line(new_coord(centre), new_coord(dots[2]))
+    make_line(new_coord(centre), new_coord(dots[3]))
+    make_line(new_coord(centre), new_coord(dots[4]))
+    make_line(new_coord(centre), new_coord(dots[5]))
 
     print(1)
 
@@ -31,14 +59,14 @@ def change_coord():
     draw_canvas()
 
 
-def miracle_x():
+def miracle_y():
     global dots
     for i in dots:
         i[0] = -i[0]
     draw_canvas()
 
 
-def miracle_y():
+def miracle_x():
     global dots
     for i in dots:
         i[1] = -i[1]
@@ -67,7 +95,7 @@ def change_rotation():
         v_y /= dist
         cur_alpha = acos(v_x)
         if asin(v_y).real < 0:
-            cur_alpha += pi
+            cur_alpha *=-1
         cur_alpha += alpha
         v_x = cos(cur_alpha).real * dist
         v_y = sin(cur_alpha).real * dist
@@ -88,7 +116,6 @@ win.resizable(False, False)
 # ------------------------------------------------------------
 canvas = tk.Canvas(win, bg="white", width=800, height=800)
 canvas.place(x=0, y=0)
-draw_canvas()
 # ------------------------------------------------------------
 shift_x = tk.Entry(win, width=15)
 shift_y = tk.Entry(win, width=15)
@@ -122,8 +149,8 @@ label_resize.place(x=850, y=125)
 # ------------------------------------------------------------
 resize_x = tk.Entry(win, width=15)
 resize_y = tk.Entry(win, width=15)
-resize_x.insert(0, '100')
-resize_y.insert(0, '100')
+resize_x.insert(0, '5')
+resize_y.insert(0, '5')
 resize_x.place(x=850, y=175)
 resize_y.place(x=950, y=175)
 # ------------------------------------------------------------
@@ -132,7 +159,7 @@ label_resize_y = tk.Label(win, text="Y")
 label_resize_x.place(x=885, y=150)
 label_resize_y.place(x=985, y=150)
 # ------------------------------------------------------------
-button_resize = tk.Button(win, text='Переместить', command=draw_canvas)
+button_resize = tk.Button(win, text='Масштаб', command=draw_canvas)
 button_resize.place(x=1100, y=150)
 # ------------------------------------------------------------
 label_rotation = tk.Label(win, text="Поворот")
@@ -159,5 +186,6 @@ button_rotation = tk.Button(win, text='Повернуть', command=change_rotat
 button_rotation.place(x=1100, y=275)
 # ------------------------------------------------------------
 button_rotation = tk.Button(win, text='Восстановить', command=reset_and_print)
-button_rotation.place(x=1100, y=275)
+button_rotation.place(x=850, y=325)
+draw_canvas()
 win.mainloop()
