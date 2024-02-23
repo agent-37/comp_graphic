@@ -19,8 +19,9 @@ def draw_canvas():
     global dots
     size_x = float(resize_x.get())
     size_y = float(resize_y.get())
+
     def clear_board():
-        canvas.create_polygon(0,0,0,800,800,800,800,0,fill='white')
+        canvas.create_polygon(0, 0, 0, 800, 800, 800, 800, 0, fill='white')
 
     def draw_line():
         canvas.create_line(400, 0, 400, 800)
@@ -31,22 +32,30 @@ def draw_canvas():
 
     def make_line(a, b):
         canvas.create_line(a[0], a[1], b[0], b[1])
+
     clear_board()
     draw_line()
+
+
     centre = [0, 0]
     for i in dots:
         centre[0] += i[0]
         centre[1] += i[1]
     centre[0] /= 6
     centre[1] /= 6
-    make_line(new_coord(centre), new_coord(dots[0]))
-    make_line(new_coord(centre), new_coord(dots[1]))
-    make_line(new_coord(centre), new_coord(dots[2]))
-    make_line(new_coord(centre), new_coord(dots[3]))
-    make_line(new_coord(centre), new_coord(dots[4]))
-    make_line(new_coord(centre), new_coord(dots[5]))
+    for i in dots:
+        make_line(new_coord(centre), new_coord(i))
+    for i in range(5):
+        midl_point = [(dots[i][0] + dots[i + 1][0]) / 2, (dots[i][1] + dots[i + 1][1]) / 2]
+        buf_point = [midl_point[0] * 2 - centre[0], midl_point[1] * 2 - centre[1]]
+        make_line(new_coord(dots[i]), new_coord(buf_point))
+        make_line(new_coord(dots[i + 1]), new_coord(buf_point))
 
-    print(1)
+    midl_point = [(dots[0][0] + dots[5][0]) / 2, (dots[0][1] + dots[5][1]) / 2]
+    buf_point = [midl_point[0] * 2 - centre[0], midl_point[1] * 2 - centre[1]]
+    make_line(new_coord(dots[0]), new_coord(buf_point))
+    make_line(new_coord(dots[5]), new_coord(buf_point))
+
 
 
 def change_coord():
@@ -95,7 +104,7 @@ def change_rotation():
         v_y /= dist
         cur_alpha = acos(v_x)
         if asin(v_y).real < 0:
-            cur_alpha *=-1
+            cur_alpha *= -1
         cur_alpha += alpha
         v_x = cos(cur_alpha).real * dist
         v_y = sin(cur_alpha).real * dist
