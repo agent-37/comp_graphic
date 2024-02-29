@@ -17,8 +17,8 @@ reset_dots()
 def draw_canvas():
     global canvas
     global dots
-    size_x = float(resize_x.get())
-    size_y = float(resize_y.get())
+    size_x = 5
+    size_y = 5
 
     def clear_board():
         canvas.create_polygon(0, 0, 0, 800, 800, 800, 800, 0, fill='white')
@@ -35,7 +35,6 @@ def draw_canvas():
 
     clear_board()
     draw_line()
-
 
     centre = [0, 0]
     for i in dots:
@@ -57,7 +56,6 @@ def draw_canvas():
     make_line(new_coord(dots[5]), new_coord(buf_point))
 
 
-
 def change_coord():
     x = float(shift_x.get())
     y = float(shift_y.get())
@@ -65,6 +63,16 @@ def change_coord():
     for i in dots:
         i[0] += x
         i[1] += y
+    draw_canvas()
+
+
+def change_coord_resize():
+    size_x = float(resize_x.get())
+    size_y = float(resize_y.get())
+    global dots
+    for i in dots:
+        i[0] *= size_x
+        i[1] *= size_y
     draw_canvas()
 
 
@@ -158,8 +166,8 @@ label_resize.place(x=850, y=125)
 # ------------------------------------------------------------
 resize_x = tk.Entry(win, width=15)
 resize_y = tk.Entry(win, width=15)
-resize_x.insert(0, '5')
-resize_y.insert(0, '5')
+resize_x.insert(0, '1')
+resize_y.insert(0, '1')
 resize_x.place(x=850, y=175)
 resize_y.place(x=950, y=175)
 # ------------------------------------------------------------
@@ -168,7 +176,7 @@ label_resize_y = tk.Label(win, text="Y")
 label_resize_x.place(x=885, y=150)
 label_resize_y.place(x=985, y=150)
 # ------------------------------------------------------------
-button_resize = tk.Button(win, text='Масштаб', command=draw_canvas)
+button_resize = tk.Button(win, text='Масштаб', command=change_coord_resize)
 button_resize.place(x=1100, y=150)
 # ------------------------------------------------------------
 label_rotation = tk.Label(win, text="Поворот")
