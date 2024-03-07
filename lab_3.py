@@ -1,6 +1,8 @@
 import tkinter as tk
 from cmath import cos, sin, pi, sqrt, acos, asin
 
+def f_coord(x):
+    return (x + 10) * 40
 
 def line(x0, y0, x1, y1):
     if y0 > y1:
@@ -57,15 +59,17 @@ def line(x0, y0, x1, y1):
                     error -= (deltay + 1)
 
 
-def print_pixel(x, y):
+def print_pixel(x1, y1):
+    x = x1
+    y = 800 - y1
     canvas.create_line(x, y, x, y + 1)
 
 
 def draw_grid():
     global canvas
-    for i in range(8):
-        canvas.create_line(i * 100, 0, i * 100, 800)
-        canvas.create_line(0, i * 100, 800, i * 100)
+    for i in range(20):
+        canvas.create_line(i * 40, 0, i * 40, 800)
+        canvas.create_line(0, i * 40, 800, i * 40)
 
 
 def draw_circle(x0, y0, radius):
@@ -92,8 +96,11 @@ def draw_circle(x0, y0, radius):
         y -= 1
 
 
-x1, y1, x2, y2 = 400, 400, 600, 500
-ox, oy, r = 200, 200, 100
+
+
+xx1, yy1, xx2, yy2 = 4, 4, 6, 5
+oxx, oyy, rr = 2, 2, 1
+x1, y1, x2, y2 = f_coord(xx1), f_coord(yy1), f_coord(xx2), f_coord(yy2)
 win = tk.Tk()
 win.title("lab 3")
 win.geometry("800x800")
@@ -102,8 +109,8 @@ win.resizable(False, False)
 canvas = tk.Canvas(win, bg="white", width=800, height=800)
 canvas.place(x=0, y=0)
 draw_grid()
-canvas.create_line(x1 + 100, y1 + 100, x2 + 100, y2 + 100)
-line(x1, y1, x2, y2)
-canvas.create_oval(ox - r + 200, oy - r , ox + r + 200, oy + r,outline='red')
-draw_circle(ox, oy, r)
+# canvas.create_line(x1 + 100, y1 + 100, x2 + 100, y2 + 100)
+# line(x1, y1, x2, y2)
+# canvas.create_oval(ox - r + 200, oy - r, ox + r + 200, oy + r, outline='red')
+# draw_circle(ox, oy, r)
 win.mainloop()
