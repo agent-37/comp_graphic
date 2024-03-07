@@ -86,6 +86,10 @@ def draw_circle(x0, y0, radius):
     canvas.create_oval(400 - radius, 400 - radius, 400 + radius, 400 + radius)
     dots = []
     while y >= 0:
+        if y == 0:
+            dots.append([radius, y])
+            dots.append([-radius, y])
+            break
         # dots.append([x0 + x, y0 + y])
         # dots.append([x0 + x, y0 - y])
         # dots.append([x0 - x, y0 + y])
@@ -100,7 +104,7 @@ def draw_circle(x0, y0, radius):
             delta += 2 * x + mashtab
             continue
         if delta > 0 and error > 0:
-            y -=mashtab
+            y -= mashtab
             delta += mashtab - 2 * y
             continue
         x += mashtab
@@ -112,8 +116,8 @@ def draw_circle(x0, y0, radius):
         print_dots(i[0] + x0, i[1] + y0, 'blue')
 
 
-xx1, yy1, xx2, yy2 = 4, 4, 1, -4
-oxx, oyy, rr = -7, -6, 6
+xx1, yy1, xx2, yy2 = 14, 4, 11, -4
+oxx, oyy, rr = -12, -10, 5
 x1, y1, x2, y2 = f_coord(xx1), f_coord(yy1), f_coord(xx2), f_coord(yy2)
 ox, oy, r = f_coord(oxx), f_coord(oyy), rr * mashtab
 win = tk.Tk()
@@ -125,6 +129,6 @@ canvas = tk.Canvas(win, bg="white", width=800, height=800)
 canvas.place(x=0, y=0)
 draw_grid()
 print_dots(400, 400, 'black')
-line(x1, y1, x2, y2)
-#draw_circle(ox, oy, r)
+#line(x1, y1, x2, y2)
+draw_circle(ox, oy, r)
 win.mainloop()
