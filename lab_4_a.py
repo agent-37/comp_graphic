@@ -24,10 +24,6 @@ def draw_grid():
         canvas.create_line(0, i * mashtab, 800, i * mashtab)
 
 
-n = int(input('Введите количество точек\n'))
-dots = []
-
-
 def input_dots():
     global n, dots
     for i in range(n):
@@ -72,39 +68,6 @@ def find_mask(ax, ay):
         return 6
 
 
-input_dots()
-check_coord()
-l, r, u, d = 1e10, 1e-10, 1e-10, 1e10
-for i in range(n):
-    l = min(l, dots[i][0])
-    r = max(r, dots[i][0])
-    u = max(u, dots[i][1])
-    d = min(d, dots[i][1])
-
-ax, ay, bx, by = map(int, input('Введите концы отрезка\n').split())
-A, B = [ax, ay], [bx, by]
-
-flag = 1
-if find_mask(ax, ay) & find_mask(bx, by) != 0:
-    flag = 0
-if (find_mask(ax, ay) == 0 and find_mask(bx, by) != 0) or (find_mask(bx, by) == 0 and find_mask(ax, ay) != 0):
-    flag = -1
-
-win = tk.Tk()
-win.title("lab 4")
-win.geometry("800x800")
-win.resizable(False, False)
-# ------------------------------------------------------------
-canvas = tk.Canvas(win, bg="white", width=800, height=800)
-canvas.place(x=0, y=0)
-
-draw_grid()
-
-canvas.create_rectangle(f_coord(l), 800 - f_coord(d), f_coord(r), 800 - f_coord(u), outline='red')
-canvas.create_line(f_coord(ax), 800 - f_coord(ay), f_coord(bx), 800 - f_coord(by), fill='blue')
-t = set()
-
-
 def check_pere(P1, P2, A, B):
     global t
     P2P1 = [P1[0] - P2[0], P1[1] - P2[1]]
@@ -119,34 +82,70 @@ def check_pere(P1, P2, A, B):
         t.add(tt)
 
 
-if abs(flag):
-    if flag == 1:
-        for i in range(n - 1):
-            check_pere(dots[i], dots[i + 1], A, B)
-        check_pere(dots[n - 1], dots[0], A, B)
-        pr_dots = []
-        for i in t:
-            pr_dots.append([ceil(f_coord((1 - i) * A[0] + i * B[0])), ceil(f_coord((1 - i) * A[1] + i * B[1]))])
+def check_in(X):
+    global dots
+    flag = 1
+    n = len(dots)
 
-        # print(pr_dots)
-        if len(pr_dots) >= 2:
-            canvas.create_line(pr_dots[0][0], 800 - pr_dots[0][1], pr_dots[1][0], 800 - pr_dots[1][1], fill='orange')
-        for i in pr_dots:
-            print_dots(i[0], i[1], 'green')
+    def sign(AB, BC):
+        if AB[0] * BC[1] - AB[1] * BC[0] < 0:
+            return 0
+        return 1
+
+    for i in range(n - 1):
+        flag = flag & sign([X[0] - dots[i][0], X[1] - dots[i][1]],
+                           [dots[i + 1][0] - dots[i][0], dots[i + 1][1] - dots[i][1]])
+    flag = flag & sign([X[0] - dots[n - 1][0], X[1] - dots[n - 1][1]],
+                       [dots[0][0] - dots[n - 1][0], dots[0][1] - dots[n - 1][1]])
+    return flag
+
+
+n = int(input('Введите количество точек\n'))
+dots = []
+input_dots()
+check_coord()
+
+ax, ay, bx, by = map(int, input('Введите концы отрезка\n').split())
+A, B = [ax, ay], [bx, by]
+
+win = tk.Tk()
+win.title("lab 4")
+win.geometry("800x800")
+win.resizable(False, False)
+# ------------------------------------------------------------
+canvas = tk.Canvas(win, bg="white", width=800, height=800)
+canvas.place(x=0, y=0)
+
+draw_grid()
+for i in range(n - 1):
+    canvas.create_line(f_coord(dots[i][0]), 800 - f_coord(dots[i][1]), f_coord(dots[i + 1][0]),
+                       800 - f_coord(dots[i + 1][1]), fill='red')
+canvas.create_line(f_coord(dots[0][0]), 800 - f_coord(dots[0][1]), f_coord(dots[n - 1][0]),
+                   800 - f_coord(dots[n - 1][1]), fill='red')
+canvas.create_line(f_coord(ax), 800 - f_coord(ay), f_coord(bx), 800 - f_coord(by), fill='blue')
+
+t = set()
+for i in range(n - 1):
+    check_pere(dots[i], dots[i + 1], A, B)
+check_pere(dots[n - 1], dots[0], A, B)
+print(len(t))
+if len(t) > 0:
+    pr_dots = []
+    for i in t:
+        pr_dots.append([ceil(f_coord((1 - i) * A[0] + i * B[0])), ceil(f_coord((1 - i) * A[1] + i * B[1]))])
+
+    if len(pr_dots) == 2:
+        canvas.create_line(pr_dots[0][0], 800 - pr_dots[0][1], pr_dots[1][0], 800 - pr_dots[1][1], fill='orange')
     else:
-        for i in range(n - 1):
-            check_pere(dots[i], dots[i + 1], A, B)
-        check_pere(dots[n - 1], dots[0], A, B)
-        pr_dots = []
-        for i in t:
-            pr_dots.append([ceil(f_coord((1 - i) * A[0] + i * B[0])), ceil(f_coord((1 - i) * A[1] + i * B[1]))])
-
         buf = []
-        if find_mask(ax, ay) == 0:
+        if check_in(A):
             buf = A
         else:
             buf = B
         canvas.create_line(pr_dots[0][0], 800 - pr_dots[0][1], f_coord(buf[0]), 800 - f_coord(buf[1]), fill='orange')
-        for i in pr_dots:
-            print_dots(i[0], i[1], 'green')
+    for i in pr_dots:
+        print_dots(i[0], i[1], 'green')
+
+print_dots(f_coord(A[0]),  f_coord(A[1]), 'green')
+print_dots(f_coord(B[0]),  f_coord(B[1]), 'green')
 win.mainloop()
