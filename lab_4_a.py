@@ -127,14 +127,26 @@ if abs(flag):
         pr_dots = []
         for i in t:
             pr_dots.append([ceil(f_coord((1 - i) * A[0] + i * B[0])), ceil(f_coord((1 - i) * A[1] + i * B[1]))])
-        for i in pr_dots:
-            print_dots(i[0], i[1], 'green')
+
         # print(pr_dots)
         if len(pr_dots) >= 2:
             canvas.create_line(pr_dots[0][0], 800 - pr_dots[0][1], pr_dots[1][0], 800 - pr_dots[1][1], fill='orange')
+        for i in pr_dots:
+            print_dots(i[0], i[1], 'green')
     else:
         for i in range(n - 1):
             check_pere(dots[i], dots[i + 1], A, B)
         check_pere(dots[n - 1], dots[0], A, B)
-        print(t)
+        pr_dots = []
+        for i in t:
+            pr_dots.append([ceil(f_coord((1 - i) * A[0] + i * B[0])), ceil(f_coord((1 - i) * A[1] + i * B[1]))])
+
+        buf = []
+        if find_mask(ax, ay) == 0:
+            buf = A
+        else:
+            buf = B
+        canvas.create_line(pr_dots[0][0], 800 - pr_dots[0][1], f_coord(buf[0]), 800 - f_coord(buf[1]), fill='orange')
+        for i in pr_dots:
+            print_dots(i[0], i[1], 'green')
 win.mainloop()
