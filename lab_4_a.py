@@ -82,6 +82,17 @@ def check_pere(P1, P2, A, B):
         t.add(tt)
 
 
+def check_pere_for_more(P1, P2, A, B):
+    P2P1 = [P1[0] - P2[0], P1[1] - P2[1]]
+    N = [-P2P1[1], P2P1[0]]
+    if (N[0] * (B[0] - A[0]) + N[1] * (B[1] - A[1])) == 0:
+        return
+    tt = (N[0] * P1[0] - A[0] * N[0] + N[1] * P1[1] - N[1] * A[1]) / (N[0] * (B[0] - A[0]) + N[1] * (B[1] - A[1]))
+    if tt > 1 or tt < 0:
+        return
+    return tt
+
+
 def check_in(X):
     global dots
     flag = 1
@@ -128,12 +139,23 @@ t = set()
 for i in range(n - 1):
     check_pere(dots[i], dots[i + 1], A, B)
 check_pere(dots[n - 1], dots[0], A, B)
+
+t_all = []
+for i in range(n - 1):
+    buf = check_pere_for_more(dots[i], dots[i + 1], A, B)
+    if buf is not None:
+        t_all.append(check_pere_for_more(dots[i], dots[i + 1], A, B))
+buf = check_pere_for_more(dots[n - 1], dots[0], A, B)
+if buf is not None:
+    t_all.append(check_pere_for_more(dots[n - 1], dots[0], A, B))
+mi, ma = 2, -1
 print(len(t))
 if len(t) > 0:
     pr_dots = []
     for i in t:
         pr_dots.append([ceil(f_coord((1 - i) * A[0] + i * B[0])), ceil(f_coord((1 - i) * A[1] + i * B[1]))])
-
+        mi = min(mi, i)
+        ma = max(ma, i)
     if len(pr_dots) == 2:
         canvas.create_line(pr_dots[0][0], 800 - pr_dots[0][1], pr_dots[1][0], 800 - pr_dots[1][1], fill='orange')
     else:
@@ -146,6 +168,32 @@ if len(t) > 0:
     for i in pr_dots:
         print_dots(i[0], i[1], 'green')
 
-print_dots(f_coord(A[0]),  f_coord(A[1]), 'green')
-print_dots(f_coord(B[0]),  f_coord(B[1]), 'green')
+before, after = [], []
+print(t_all)
+for i in t_all:
+    if mi is None:
+        before.append([ceil(f_coord((1 - i) * A[0] + i * B[0])), ceil(f_coord((1 - i) * A[1] + i * B[1]))])
+    else:
+        if i < mi:
+            before.append([ceil(f_coord((1 - i) * A[0] + i * B[0])), ceil(f_coord((1 - i) * A[1] + i * B[1]))])
+        else:
+            if i > ma:
+                after.append([ceil(f_coord((1 - i) * A[0] + i * B[0])), ceil(f_coord((1 - i) * A[1] + i * B[1]))])
+
+print_dots(f_coord(A[0]), f_coord(A[1]), 'green')
+print_dots(f_coord(B[0]), f_coord(B[1]), 'green')
+for i in before:
+    print_dots(i[0], i[1], 'red')
+for i in after:
+    print_dots(i[0], i[1], 'purple')
+
 win.mainloop()
+#
+# 7
+# 0 0
+# 5 0
+# 7 2
+# 7 5
+# 6 7
+# 3 7
+# 0 6
