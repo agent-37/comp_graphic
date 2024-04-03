@@ -99,7 +99,7 @@ def check_in(X):
     n = len(dots)
 
     def sign(AB, BC):
-        if AB[0] * BC[1] - AB[1] * BC[0] < 0:
+        if AB[0] * BC[1] - AB[1] * BC[0] > 0:
             return 0
         return 1
 
@@ -167,7 +167,11 @@ if len(t) > 0:
         canvas.create_line(pr_dots[0][0], 800 - pr_dots[0][1], f_coord(buf[0]), 800 - f_coord(buf[1]), fill='orange')
     for i in pr_dots:
         print_dots(i[0], i[1], 'green')
-
+else:
+    if check_in(A) and check_in(B):
+        canvas.create_line(f_coord(A[0]), 800 - f_coord(A[1]), f_coord(B[0]), 800 - f_coord(B[1]), fill='orange')
+    else:
+        canvas.create_line(f_coord(A[0]), 800 - f_coord(A[1]), f_coord(B[0]), 800 - f_coord(B[1]),fill='orange')
 before, after = [], []
 print(t_all)
 for i in t_all:
