@@ -61,19 +61,19 @@ def find_mask(ax, ay):
         d = min(d, b_dots[i][1])
     if ax < l and ay < d:
         return 9
-    if ax <= l and u >= ay >= d:
+    if ax < l and d <= ay <= u:
         return 1
-    if ax < l and ay < u:
+    if ax < l and u < ay:
         return 3
-    if l <= ax <= r and ay <= d:
+    if l <= ax <= r and ay < d:
         return 8
-    if l < ax < r and d < ay < u:
+    if l <= ax <= r and d <= ay <= u:
         return 0
-    if l <= ax <= r and u <= ay:
+    if l <= ax <= r and u < ay:
         return 2
     if r < ax and ay < d:
         return 12
-    if r <= ax and d <= ay <= u:
+    if r < ax and d <= ay <= u:
         return 4
     if r < ax and u < ay:
         return 6
