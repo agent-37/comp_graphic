@@ -146,7 +146,7 @@ else:
                 canvas.create_line(aax, 800 - aay, bbx, 800 - bby, fill='orange')
         print_dots(ceil(dots[i][0]), ceil(dots[i][1]), 'green')
 win.mainloop()
-
+#
 # 4
 # 0 0
 # 5 0

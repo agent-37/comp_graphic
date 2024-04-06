@@ -88,8 +88,8 @@ def check_pere_for_more(P1, P2, A, B):
     if (N[0] * (B[0] - A[0]) + N[1] * (B[1] - A[1])) == 0:
         return
     tt = (N[0] * P1[0] - A[0] * N[0] + N[1] * P1[1] - N[1] * A[1]) / (N[0] * (B[0] - A[0]) + N[1] * (B[1] - A[1]))
-    if tt > 1 or tt < 0:
-        return
+    # if tt > 1 or tt < 0:
+    #     return
     return tt
 
 
@@ -171,7 +171,7 @@ else:
     if check_in(A) and check_in(B):
         canvas.create_line(f_coord(A[0]), 800 - f_coord(A[1]), f_coord(B[0]), 800 - f_coord(B[1]), fill='orange')
     else:
-        canvas.create_line(f_coord(A[0]), 800 - f_coord(A[1]), f_coord(B[0]), 800 - f_coord(B[1]),fill='orange')
+        canvas.create_line(f_coord(A[0]), 800 - f_coord(A[1]), f_coord(B[0]), 800 - f_coord(B[1]),fill='blue')
 before, after = [], []
 print(t_all)
 for i in t_all:
@@ -201,3 +201,15 @@ win.mainloop()
 # 6 7
 # 3 7
 # 0 6
+
+
+#
+# 8
+# 2 0
+# 4 0
+# 6 2
+# 6 4
+# 4 6
+# 2 6
+# 0 4
+# 0 2
