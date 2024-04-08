@@ -63,7 +63,7 @@ def line(x0, y0, x1, y1):
 
 
 win = tk.Tk()
-win.title("lab 4")
+win.title("lab 5")
 win.geometry("800x800")
 win.resizable(False, False)
 # ------------------------------------------------------------
