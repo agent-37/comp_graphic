@@ -75,6 +75,10 @@ def build_Endru(l, sign):
     for i in range(1, len(l)):
         print(l[i], '!!!')
         while len(st) >= 2 and cross_AB_AC(st[len(st) - 1], st[len(st) - 2], l[i]) * sign < 0:
+            canvas.create_line(st[len(st) - 1][0], st[len(st) - 1][1], l[i][0], l[i][1], fill='black')
+
+            win.update()
+            time.sleep(1)
             canvas.create_line(st[len(st) - 1][0], st[len(st) - 1][1], l[i][0], l[i][1], fill='red')
             canvas.create_line(st[len(st) - 1][0], st[len(st) - 1][1], st[len(st) - 2][0], st[len(st) - 2][1],
                                fill='red')
