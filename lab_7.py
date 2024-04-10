@@ -48,7 +48,7 @@ def print_triangle(list_tr, dots):
         canvas.create_line(dots[i.d[1]][0], dots[i.d[1]][1], dots[i.d[2]][0], dots[i.d[2]][1])
         canvas.create_line(dots[i.d[0]][0], dots[i.d[0]][1], dots[i.d[2]][0], dots[i.d[2]][1])
     win.update()
-    time.sleep(0.2)
+    time.sleep(2)
 
 
 def check_in_tr(A, B, C, D):
@@ -85,7 +85,7 @@ def check_in_circle_ABC(A, B, C, D):
             C[0] ** 2 + C[1] ** 2) * B[0] * A[1])
     x = D[0]
     y = D[1]
-    if (a / abs(a))(a * (x ** 2 + y ** 2) - x * b + y * c - d) >= 0:
+    if (a / abs(a))*(a * (x ** 2 + y ** 2) - x * b + y * c - d) >= 0:
         return 0
     return 1
 
@@ -102,7 +102,6 @@ def make_new_hull(current):
         if flag == 1:
             cur_list.append(i)
     new_list = [[find_ungle([dots[i][0] - dots[current][0], dots[i][1] - dots[current][1]]), i] for i in cur_list]
-    # need + 2*pi
     flag = 0
     for i in range(len(new_list)):
         for j in range(i + 1, len(new_list)):
@@ -125,7 +124,30 @@ def make_new_hull(current):
         buf.append(hull[pos])
         pos = (pos + 1) % len(hull)
     hull = buf.copy()
+    for i in range(len(new_list) - 1):
+        def find_tr(a, b):
+            global list_tr
+            if a > b:
+                a, b = b, a
+            for j in range(len(list_tr)):
+                if list_tr[j].d[0] == a and list_tr[j].d[1] == b or list_tr[j].d[0] == a and list_tr[j].d[2] == b or \
+                        list_tr[j].d[1] == a and list_tr[j].d[2] == b:
+                    return j
 
+        cur_tr = find_tr(new_list[i][1], new_list[i + 1][1])
+        if check_in_circle_ABC(dots[list_tr[cur_tr].d[0]], dots[list_tr[cur_tr].d[1]], dots[list_tr[cur_tr].d[2]],
+                               dots[current]) == 0:
+            list_tr.append(make_triangle(current, new_list[i][1], new_list[i + 1][1]))
+        else:
+            buf = list_tr[cur_tr].d.copy()
+            b = -1
+            for j in range(3):
+                if new_list[i][1] != buf[j] and new_list[i + 1][1] != buf[j]:
+                    b = buf[j]
+                    break
+            list_tr.pop(cur_tr)
+            list_tr.append(make_triangle(current, b, new_list[i][1]))
+            list_tr.append(make_triangle(current, b, new_list[i + 1][1]))
 
 
 def make_step(current):
@@ -181,4 +203,5 @@ for i in range(2, n):
     if i not in uses_dots:
         uses_dots.append(i)
         make_step(i)
+print('i am here')
 win.mainloop()
