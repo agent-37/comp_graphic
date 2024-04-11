@@ -97,3 +97,11 @@ while len(q) != 0:
     q.append([cur[0], cur[1] + 1])
     q.append([cur[0], cur[1] - 1])
 win.mainloop()
+#
+# 6
+# 400 400
+# 500 300
+# 600 400
+# 400 600
+# 200 400
+# 300 300
